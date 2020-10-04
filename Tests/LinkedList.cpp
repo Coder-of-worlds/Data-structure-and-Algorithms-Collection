@@ -1,7 +1,7 @@
 #include <moka/moka.h>
 #include <LinkedList.hpp>
 
-Moka::Context all ("**Collecton::DataStructure::LinkedList - testing**", [](Moka::Context& it) {
+Moka::Context all ("Collecton::DataStructure::LinkedList", [](Moka::Context& it) {
 	it.should("Declare LinkedList", []() {
 		Collection::DataStructure::LinkedList <int> array;
 	});
