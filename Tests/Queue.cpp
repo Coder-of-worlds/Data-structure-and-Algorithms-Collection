@@ -1,8 +1,8 @@
 #include <moka/moka.h>
 #include <Queue.hpp>
 
-Moka::Context all ("Collecton::DataStructure::DynamicArray", [](Moka::Context& it) {
-	it.should("declare DynamicArray", []() {
+Moka::Context all ("Collecton::DataStructure::Queue", [](Moka::Context& it) {
+	it.should("declare Queue", []() {
 		Collection::DataStructure::Queue <int> array;
 	});
     it.should("be empty", []() {
@@ -14,11 +14,18 @@ Moka::Context all ("Collecton::DataStructure::DynamicArray", [](Moka::Context& i
         array.push (1); 
         must_equal (array.back(), 1);
 	});
-    it.should("pop the first element", []() {
+    it.should("pop the only element", []() {
 		Collection::DataStructure::Queue <int> array;
         array.push (1);
         must_equal (array.pop (), 1);
         must_equal (array.empty(), true);
+	});
+    it.should("pop the first element", []() {
+		Collection::DataStructure::Queue <int> array;
+        array.push (1);
+        array.push (2);
+        must_equal (array.pop (), 1);
+        must_equal (array.empty(), false);
 	});
 });
 

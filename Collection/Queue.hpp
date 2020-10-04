@@ -4,66 +4,152 @@ namespace Collection
     namespace DataStructure
     {
         template <typename T> class Queue
-        {        
-        private:
-            T* array;
-            std::size_t _size;
-            std::size_t _capacity;
-            void resize (std::size_t new_size)
+        {
+        public:
+            class Iterator
             {
-                T* tmp = new T [new_size];
-                _size = ((_size < new_size) ? _size : new_size);
-                _capacity = new_size;
-                for (std::size_t i = 0 ; i < size () ; i ++)
-                    tmp [i] = get (i);
-                delete[] array;
-                array = tmp;
-            }
+                T value;
+                Iterator* next;
+                Iterator* prev;
+                bool nan;
+                friend class Queue <T>;
+
+                Iterator (const char* x __attribute__((unused)))
+                {
+                    nan = true;
+                    value = T();
+                    next = prev = nullptr;
+                }
+            public:
+                Iterator (const T& val)
+                {
+                    nan = false;
+                    value = val;
+                    next = prev = nullptr;
+                }
+                Iterator ()
+                {
+                    nan = false;
+                    value = T();
+                    next = prev = nullptr;
+                }
+                T& operator () () 
+                {
+                    return value;
+                }
+                bool operator != (Iterator x) const
+                {
+                    return value != x.value or prev != x.prev or next != x.next or this->nan != x.nan;
+                }
+                Iterator& Next ()
+                {
+                    if (next == nullptr)
+                        throw Collection::Expection::OutOfRange(1, 0);
+                    return *next;
+                }
+                Iterator& Prev ()
+                {
+                    if (prev == nullptr)
+                        throw Collection::Expection::OutOfRange(-1, 0);
+                    return *prev;
+                }
+                inline bool isNone () const
+                {
+                    return nan;
+                }
+                friend std::ostream& operator << (std::ostream& out, Iterator it)
+                {
+                    if (it.isNone())
+                        out << "None";
+                    else
+                        out << it();
+                    return out;
+                }
+                Iterator& insertAfter (const T& value)
+                {
+                    if (nan == true)
+                        throw Collection::Expection::OutOfRange (0, 0);
+                    Iterator* x = new Iterator (value);
+                    x->next = this->next;
+                    this->next = x;
+                    x->prev = this;
+                    return *x;
+                }
+                Iterator& insertBefore (const T& value)
+                {
+                    if (nan == true)
+                        throw Collection::Expection::OutOfRange (0, 0);
+                    Iterator* x = new Iterator (value);
+                    x->prev = this->prev;
+                    this->prev = x;
+                    x->next = this;
+                    return *x;
+                }
+            };
+            
             inline std::size_t size () const
             {
                 return _size;
             }
-            inline std::size_t capacity () const
+        private:
+            Iterator* head;
+            Iterator* tail;
+            std::size_t _size;
+            Iterator NaN;
+        public: 
+            const Iterator& None () const
             {
-                return _capacity;
+                return NaN;
             }
-            T& get (const std::size_t index) const
-            {
-                if (index >= size())
-                    throw Collection::Expection::OutOfRange (index, size());
-                return array [index];
-            }
-        public:
             Queue ()
             {
-                array = new T [1];
-                _capacity = 1;
+                NaN = Iterator ("NaN");
+                head = nullptr;
+                tail = nullptr;
                 _size = 0;
             }
             void push (const T& val)
             {
-                if (size() == capacity())
-                {
-                    resize (capacity() * 2);
-                }
+                NaN = Iterator ("NaN");
                 _size ++;
-                array [_size - 1] = val;
+                Iterator* node = new Iterator (val);
+                if (head == nullptr and tail == nullptr)
+                    head = tail = node;
+                else
+                {
+                    node->prev = tail;
+                    node->next = nullptr;
+                    tail->next = node;
+                    tail = node;
+                }
             }
+            
             const T pop ()
             {
-                if (size () == 0)
-                    throw Collection::Expection::PopingOutOfEmptyCollection();
-                const T x = get (size () - 1);
-                _size --;
-                return x;
+                T val;
+                if (head == nullptr and tail == nullptr)
+                    throw Collection::Expection::PopingOutOfEmptyCollection ();
+                else
+                {
+                    _size --;
+                    Iterator* x = head;
+                    head = head->next;
+                    if (head != nullptr)
+                    {
+                        head->prev = nullptr;
+                    }
+                    val = (*x)();
+                    delete x;
+                }
+                return val;
             }
-            inline const T back () const
-            {
-                return get (size () - 1);
-            }
-            inline bool empty () const
+            inline bool empty () const 
             {
                 return size () == 0;
+            }
+            inline const T& back () const 
+            {
+                return (*tail)();
             }
         };
     }
