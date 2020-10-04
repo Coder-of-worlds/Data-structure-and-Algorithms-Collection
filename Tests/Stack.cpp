@@ -3,7 +3,7 @@
 
 Moka::Context all ("**Collecton::DataStructure::Stack - testing**", [](Moka::Context& it) {
 	it.should("Declare Stack", []() {
-		Colleciton::DataStructure::Stack <int> array;
+		Collection::DataStructure::Stack <int> array;
 	});
 });
 
