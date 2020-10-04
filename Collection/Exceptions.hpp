@@ -22,5 +22,19 @@ namespace Collection
                 return expection;
             }
         };
+
+        struct PopingOutOfEmptyCollection : public std::exception
+        {
+        public: 
+            PopingOutOfEmptyCollection ()
+            {
+            }
+            const char * what () const throw ()
+            {
+                char* expection = new char [2048];
+                sprintf (expection, "Expection: Poping out of empty collection is not available.");
+                return expection;
+            }
+        };
     }
 }
