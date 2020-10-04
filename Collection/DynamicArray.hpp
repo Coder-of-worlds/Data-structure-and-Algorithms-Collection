@@ -1,4 +1,4 @@
-#include "Expections.hpp"
+#include "Exceptions.hpp"
 
 namespace Collection
 {
@@ -52,6 +52,8 @@ namespace Collection
             }
             const T pop ()
             {
+                if (size () == 0)
+                    throw Collection::Expection::PopingOutOfEmptyCollection();
                 const T x = get (size () - 1);
                 _size --;
                 return x;
