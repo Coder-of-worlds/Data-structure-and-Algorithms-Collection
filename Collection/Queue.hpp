@@ -1,10 +1,10 @@
-namespace Colleciton
+namespace Collection
 {
-    namespace DataStructures
+    namespace DataStructure
     {
         template <typename T> class Queue
         {
-            Queue ()
+            public: Queue ()
             {
                 
             }

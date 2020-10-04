@@ -3,7 +3,7 @@
 
 Moka::Context all ("**Collecton::DataStructure::Queue - testing**", [](Moka::Context& it) {
 	it.should("Declare Queue", []() {
-		Colleciton::DataStructure::Queue <int> array;
+		Collection::DataStructure::Queue <int> array;
 	});
 });
 

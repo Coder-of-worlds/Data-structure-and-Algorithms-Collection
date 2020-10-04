@@ -3,7 +3,7 @@
 
 Moka::Context all ("**Collecton::DataStructure::LinkedList - testing**", [](Moka::Context& it) {
 	it.should("Declare LinkedList", []() {
-		Colleciton::DataStructure::LinkedList <int> array;
+		Collection::DataStructure::LinkedList <int> array;
 	});
 });
 
